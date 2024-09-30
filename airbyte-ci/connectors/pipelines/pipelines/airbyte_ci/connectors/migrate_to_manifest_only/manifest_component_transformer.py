@@ -216,4 +216,7 @@ class ManifestComponentTransformer:
 
     @staticmethod
     def _is_json_schema_object(propagated_component: Mapping[str, Any]) -> bool:
+        component_type = propagated_component.get("type")
+        if isinstance(component_type, list):
+            return "object" in component_type
         return propagated_component.get("type") == "object"
