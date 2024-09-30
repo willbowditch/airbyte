@@ -28,8 +28,8 @@ from pipelines.models.steps import Step, StepResult, StepStatus
 ## GLOBAL VARIABLES ##
 
 # spec.yaml and spec.json will be removed as part of the conversion. But if they are present, it's fine to convert still.
-MANIFEST_ONLY_COMPATIBLE_FILES = ["manifest.yaml", "run.py", "__init__.py", "source.py", "spec.json", "spec.yaml"]
-MANIFEST_ONLY_KEEP_FILES = ["manifest.yaml", "metadata.yaml", "icon.svg", "integration_tests", "acceptance-test-config.yml", "secrets"]
+MANIFEST_ONLY_COMPATIBLE_FILES = ["manifest.yaml", "components.py", "run.py", "__init__.py", "source.py", "spec.json", "spec.yaml", "__pycache__"]
+MANIFEST_ONLY_KEEP_FILES = ["manifest.yaml", "components.py", "metadata.yaml", "icon.svg", "integration_tests", "acceptance-test-config.yml", "secrets"]
 
 
 ## STEPS ##
@@ -151,10 +151,12 @@ class StripConnector(Step):
     async def _run(self) -> StepResult:
         connector = self.context.connector
 
-        ## 1. Move manifest.yaml to the root level of the directory
-        self.logger.info("Moving manifest to the root level of the directory")
+        ## 1. Move manifest.yaml and components.py to the root level of the directory
+        self.logger.info("Moving manifest and components (if they exist) to the root level of the directory")
         root_manifest_path = connector.code_directory / "manifest.yaml"
+        root_components_path = connector.code_directory / "components.py"
         connector.manifest_path.rename(root_manifest_path)
+        connector.manifest_only_components_path.rename(root_components_path)
 
         ## 2. Update the version in manifest.yaml
         try:
