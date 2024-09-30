@@ -28,8 +28,25 @@ from pipelines.models.steps import Step, StepResult, StepStatus
 ## GLOBAL VARIABLES ##
 
 # spec.yaml and spec.json will be removed as part of the conversion. But if they are present, it's fine to convert still.
-MANIFEST_ONLY_COMPATIBLE_FILES = ["manifest.yaml", "components.py", "run.py", "__init__.py", "source.py", "spec.json", "spec.yaml", "__pycache__"]
-MANIFEST_ONLY_KEEP_FILES = ["manifest.yaml", "components.py", "metadata.yaml", "icon.svg", "integration_tests", "acceptance-test-config.yml", "secrets"]
+MANIFEST_ONLY_COMPATIBLE_FILES = [
+    "manifest.yaml",
+    "components.py",
+    "run.py",
+    "__init__.py",
+    "source.py",
+    "spec.json",
+    "spec.yaml",
+    "__pycache__",
+]
+MANIFEST_ONLY_KEEP_FILES = [
+    "manifest.yaml",
+    "components.py",
+    "metadata.yaml",
+    "icon.svg",
+    "integration_tests",
+    "acceptance-test-config.yml",
+    "secrets",
+]
 
 
 ## STEPS ##
