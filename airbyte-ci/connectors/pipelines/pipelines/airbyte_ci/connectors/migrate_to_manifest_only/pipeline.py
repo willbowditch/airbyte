@@ -152,11 +152,15 @@ class StripConnector(Step):
         connector = self.context.connector
 
         ## 1. Move manifest.yaml and components.py to the root level of the directory
-        self.logger.info("Moving manifest and components (if they exist) to the root level of the directory")
+        self.logger.info("Moving manifest to the root level of the directory")
         root_manifest_path = connector.code_directory / "manifest.yaml"
-        root_components_path = connector.code_directory / "components.py"
         connector.manifest_path.rename(root_manifest_path)
-        connector.manifest_only_components_path.rename(root_components_path)
+
+        ## 2. Move components.py to the root level of the directory if it exists
+        if connector.manifest_only_components_path.exists():
+            self.logger.info("Custom components file found. Moving to the root level of the directory")
+            root_components_path = connector.code_directory / "components.py"
+            connector.manifest_only_components_path.rename(root_components_path)
 
         ## 2. Update the version in manifest.yaml
         try:
