@@ -16,14 +16,14 @@ repository = "https://github.com/airbytehq/airbyte"
 include = "destination_sftp_json"
 
 [tool.poetry.dependencies]
-python = "^3.9,<3.12"
-paramiko = "==2.7.2"
-smart-open = "==5.1.0"
-airbyte-cdk = "==0.1.36"
+python = "^3.10,<3.12"
+paramiko = "^3.5.0"
+smart-open = "^7.0.5"
+airbyte-cdk = "^5.13.0"
 
 [tool.poetry.scripts]
 destination-sftp-json = "destination_sftp_json.run:run"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^6.1"
-docker = "==5.0.3"
+pytest = "^8.3.3"
+docker = "^7.1.0"
