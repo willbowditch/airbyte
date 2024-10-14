@@ -2,14 +2,13 @@
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
 
-import time
 import logging
+import time
 from socket import socket
 from typing import Any, Dict, List, Mapping
 
 import docker
 import pytest
-
 from airbyte_cdk.models import (
     AirbyteMessage,
     AirbyteRecordMessage,

@@ -3,9 +3,9 @@
 #
 
 
+import logging
 import traceback
 import uuid
-import logging
 from typing import Any, Iterable, Mapping
 
 from airbyte_cdk.destinations import Destination
