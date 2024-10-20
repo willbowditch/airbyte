@@ -26,4 +26,4 @@ destination-sftp-json = "destination_sftp_json.run:run"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-docker = "^7.1.0"
+pytest-docker = "^3.1.1"

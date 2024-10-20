@@ -1,14 +1,20 @@
 #
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
+from __future__ import annotations
 
 import logging
 import time
+from pathlib import Path
 from socket import socket
 from typing import Any, Dict, List, Mapping
 
-import docker
+import paramiko
+import paramiko.client
 import pytest
+from destination_sftp_json import DestinationSftpJson
+from destination_sftp_json.client import SftpClient
+
 from airbyte_cdk.models import (
     AirbyteMessage,
     AirbyteRecordMessage,
@@ -21,33 +27,43 @@ from airbyte_cdk.models import (
     SyncMode,
     Type,
 )
-from destination_sftp_json import DestinationSftpJson
-from destination_sftp_json.client import SftpClient
 
 
-@pytest.fixture(scope="module")
-def docker_client():
-    return docker.from_env()
+def is_sftp_ready(ip: str, port: str) -> bool:
+    """
+    Checks if sftp is served on provided ip address and port.
+    """
+    try:
+        with paramiko.client.SSHClient() as ssh:
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy)
+            ssh.connect(
+                ip,
+                port=port,
+                username="user1",
+                password="abc123",
+            )
+        return True
+    except paramiko.SSHException:
+        return False
+
+
+# NOTE: I'm not sure if specifying the docker-compose file is required or if it would be picked up automatically,
+# but I've copied this approach from source-file.
+@pytest.fixture(scope="session")
+def docker_compose_file() -> Path:
+    return Path(__file__).parent.absolute() / "docker-compose.yml"
 
 
 @pytest.fixture(name="config", scope="module")
-def config_fixture(docker_client):
-    with socket() as s:
-        s.bind(("", 0))
-        available_port = s.getsockname()[1]
-
-    config = {"host": "0.0.0.0", "port": available_port, "username": "foo", "password": "pass", "destination_path": "upload"}
-    container = docker_client.containers.run(
-        "atmoz/sftp",
-        f"{config['username']}:{config['password']}:::{config['destination_path']}",
-        name="mysftp",
-        ports={22: config["port"]},
-        detach=True,
-    )
-    time.sleep(20)
-    yield config
-    container.kill()
-    container.remove()
+def config_fixture(docker_ip, docker_services):
+    """
+    Provides the SFTP configuration using docker_services.
+    Waits for the docker container to become available before returning the config.
+    """
+    port = docker_services.port_for("sftp", 22)
+    config = {"host": docker_ip, "port": port, "username": "user1", "password": "abc123", "destination_path": "upload"}
+    docker_services.wait_until_responsive(timeout=30.0, pause=0.1, check=lambda: is_sftp_ready(docker_ip, port))
+    return config
 
 
 @pytest.fixture(name="configured_catalog")

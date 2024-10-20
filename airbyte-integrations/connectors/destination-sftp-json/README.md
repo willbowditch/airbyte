@@ -1,6 +1,6 @@
 # Sftp-Json source connector
 
-This is the repository for the Sftp-Json source connector, written in Python.
+This is the repository for the SFTP-JSON destination connector, written in Python.
 For information about how to use this connector within Airbyte, see [the documentation](https://docs.airbyte.com/integrations/destinations/sftp-json).
 
 ## Local development
