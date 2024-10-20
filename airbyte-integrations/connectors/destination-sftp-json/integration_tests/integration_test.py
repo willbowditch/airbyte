@@ -12,9 +12,6 @@ from typing import Any, Dict, List, Mapping
 import paramiko
 import paramiko.client
 import pytest
-from destination_sftp_json import DestinationSftpJson
-from destination_sftp_json.client import SftpClient
-
 from airbyte_cdk.models import (
     AirbyteMessage,
     AirbyteRecordMessage,
@@ -27,6 +24,8 @@ from airbyte_cdk.models import (
     SyncMode,
     Type,
 )
+from destination_sftp_json import DestinationSftpJson
+from destination_sftp_json.client import SftpClient
 
 
 def is_sftp_ready(ip: str, port: str) -> bool:
