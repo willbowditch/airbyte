@@ -9,6 +9,7 @@ This directory contains the manifest-only connector for [`source-circleci`](http
 `CircleCI` uses api key authentication, Visit `https://app.circleci.com/settings/user/tokens` for getting your api keys.
 
 ## Configuration
+<StyledTableWrapper>
 
 | Input | Type | Description | Default Value |
 |-------|------|-------------|---------------|
@@ -21,7 +22,11 @@ This directory contains the manifest-only connector for [`source-circleci`](http
 | `workflow_name` | `string` | Workflow name for fetching information.  |  |
 | `job_number` | `string` | Job Number of the workflow.  | `2` |
 
+</StyledTableWrapper>
+
 ## Streams
+
+<StyledTableWrapper>
 | Stream Name | Primary Key | Pagination | Supports Full Sync | Supports Incremental |
 |-------------|-------------|------------|---------------------|----------------------|
 | context | id | DefaultPaginator | ✅ |  ✅  |
@@ -36,6 +41,7 @@ This directory contains the manifest-only connector for [`source-circleci`](http
 | insights_metrics | project_id | DefaultPaginator | ✅ |  ❌ |
 | insights_branches | id | DefaultPaginator | ✅ |  ❌ |
 | workflow_jobs | id | DefaultPaginator | ✅ |  ✅ |
+</StyledTableWrapper>
 
 ## Changelog
 

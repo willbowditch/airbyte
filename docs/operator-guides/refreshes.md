@@ -57,11 +57,17 @@ With the advent of Refresh and Retain History Syncs, Airbyte has provided a way 
 
 Consider the following example. You are extracting data into your data warehouse and notice that data for March, 2024 is missing. You are using an append sync mode.
 
+<StyledTableWrapper header="primary">
+
 | year_month (pk) | total_sales | \_airbyte_extracted_at | \_airbyte_generation_id | \_airbyte_meta                 | \_airbyte_raw_id |
 | --------------- | ----------- | ---------------------- | ----------------------- | ------------------------------ | ---------------- |
 | 2024-01         | $100        | 2024-01-01 12:00:00    | 0                       | `{ changes: [], sync_id: 1, }` | aaa-aaa          |
 | 2024-02         | $200        | 2024-01-01 12:00:00    | 0                       | `{ changes: [], sync_id: 1, }` | bbb-bbb          |
 | 2024-04         | $400        | 2024-01-01 12:00:00    | 0                       | `{ changes: [], sync_id: 1, }` | ccc-ccc          |
+
+</StyledTableWrapper>
+
+<StyledTableWrapper header="secondary">
 
 You decide to do a Refresh and Retain History Sync, and now have the missing row
 
@@ -74,6 +80,8 @@ You decide to do a Refresh and Retain History Sync, and now have the missing row
 | 2024-02         | $200        | 2024-01-02 12:00:00    | 1                       | `{ changes: [], sync_id: 2, }` | eee-eee          |
 | 2024-03         | $300        | 2024-01-02 12:00:00    | 1                       | `{ changes: [], sync_id: 2, }` | fff-fff          |
 | 2024-04         | $400        | 2024-01-02 12:00:00    | 1                       | `{ changes: [], sync_id: 2, }` | ggg-ggg          |
+
+</StyledTableWrapper>
 
 It is now possible to compute the different total values of `sum(total_sales)` for _each generation_, and then if they are different, to look for records which didn’t exist before and after the reset, in different generations. If you aren’t using an append sync mode, the data for both the previous and current generations will be retained in your destination’s raw tables, but not displayed in the final tables. A similar analysis could be performed looking for records which exist in the current generations, but not the previous.
 
